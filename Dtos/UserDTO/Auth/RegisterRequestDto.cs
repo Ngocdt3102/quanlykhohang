@@ -1,13 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace QUANLYKHOHANG.API.DTOs.UserDTO.Users;
+namespace QUANLYKHOHANG.API.DTOs.UserDTO.Auth;
 
-public class UserResponseDto
+public class RegisterRequestDto
 {
-    [Required]
-    public int Id { get; set; }
-
-    [Required]
+    [Required(ErrorMessage = "Username là bắt buộc.")]
     [StringLength(
         50,
         MinimumLength = 3,
@@ -15,7 +12,8 @@ public class UserResponseDto
     )]
     public string Username { get; set; } = string.Empty;
 
-    [Required]
+
+    [Required(ErrorMessage = "Email là bắt buộc.")]
     [EmailAddress(ErrorMessage = "Email không đúng định dạng.")]
     [StringLength(
         100,
@@ -23,13 +21,32 @@ public class UserResponseDto
     )]
     public string Email { get; set; } = string.Empty;
 
-    [Required]
+
+    [Required(ErrorMessage = "Password là bắt buộc.")]
+    [StringLength(
+        20,
+        MinimumLength = 8,
+        ErrorMessage = "Password phải từ 8 đến 20 ký tự."
+    )]
+    public string Password { get; set; } = string.Empty;
+
+
+    [Required(ErrorMessage = "Xác nhận password là bắt buộc.")]
+    [Compare(
+        "Password",
+        ErrorMessage = "Xác nhận password không khớp."
+    )]
+    public string ConfirmPassword { get; set; } = string.Empty;
+
+
+    [Required(ErrorMessage = "Họ tên là bắt buộc.")]
     [StringLength(
         100,
         MinimumLength = 2,
         ErrorMessage = "Họ tên phải từ 2 đến 100 ký tự."
     )]
     public string FullName { get; set; } = string.Empty;
+
 
     [Phone(ErrorMessage = "Số điện thoại không hợp lệ.")]
     [StringLength(
@@ -38,29 +55,11 @@ public class UserResponseDto
     )]
     public string? PhoneNumber { get; set; }
 
+
     [Url(ErrorMessage = "AvatarUrl không đúng định dạng URL.")]
     [StringLength(
         500,
         ErrorMessage = "AvatarUrl không được vượt quá 500 ký tự."
     )]
     public string? AvatarUrl { get; set; }
-
-    [Required]
-    [StringLength(
-        50,
-        ErrorMessage = "Role không được vượt quá 50 ký tự."
-    )]
-    public string Role { get; set; } = string.Empty;
-
-    [Required]
-    [StringLength(
-        20,
-        ErrorMessage = "Status không được vượt quá 20 ký tự."
-    )]
-    public string Status { get; set; } = string.Empty;
-
-    [Required]
-    public DateTime CreatedAt { get; set; }
-
-    public DateTime? LastLoginAt { get; set; }
 }
