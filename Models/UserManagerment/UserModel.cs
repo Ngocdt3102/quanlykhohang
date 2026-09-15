@@ -1,11 +1,13 @@
 namespace QUANLYKHOHANG.API.Models.UserManagement;
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class UserModel
 {
     [Key]
-    public Guid Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
 
 
     [Required(ErrorMessage = "Username là bắt buộc.")]
@@ -53,7 +55,7 @@ public class UserModel
     public UserStatus Status { get; set; } = UserStatus.Active;
 
 
-    public Guid RoleId { get; set; }
+    public int RoleId { get; set; }
 
     public RolesModel Role { get; set; } = null!;
 

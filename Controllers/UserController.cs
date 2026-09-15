@@ -21,7 +21,7 @@ namespace Quanlykhohang.Controllers.User
         {
             new UserModel
             {
-                Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                Id = 1,
                 Username = "admin",
                 Email = "admin@example.com",
                 PasswordHash = "HASHED:admin123456",
@@ -29,13 +29,13 @@ namespace Quanlykhohang.Controllers.User
                 PhoneNumber = "0900000001",
                 AvatarUrl = null,
                 Status = UserStatus.Active,
-                RoleId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                RoleId = 1,
                 CreatedAt = DateTime.UtcNow.AddYears(-1)
             },
 
             new UserModel
             {
-                Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                Id = 2,
                 Username = "warehouse_manager",
                 Email = "manager@example.com",
                 PasswordHash = "HASHED:manager123456",
@@ -43,13 +43,13 @@ namespace Quanlykhohang.Controllers.User
                 PhoneNumber = "0900000002",
                 AvatarUrl = null,
                 Status = UserStatus.Active,
-                RoleId = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                RoleId = 2,
                 CreatedAt = DateTime.UtcNow.AddMonths(-6)
             },
 
             new UserModel
             {
-                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                Id = 3,
                 Username = "warehouse_staff",
                 Email = "staff@example.com",
                 PasswordHash = "HASHED:staff123456",
@@ -57,7 +57,7 @@ namespace Quanlykhohang.Controllers.User
                 PhoneNumber = "0900000003",
                 AvatarUrl = null,
                 Status = UserStatus.Active,
-                RoleId = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+                RoleId = 3,
                 CreatedAt = DateTime.UtcNow.AddMonths(-3)
             }
         };
@@ -84,8 +84,8 @@ namespace Quanlykhohang.Controllers.User
         // Lấy thông tin một User theo Id
         // =========================================================
 
-        [HttpGet("{id:guid}")]
-        public ActionResult<UserResponseDto> GetUserById(Guid id)
+        [HttpGet("{id:int}")]
+        public ActionResult<UserResponseDto> GetUserById(int id)
         {
             var user = Users
                 .FirstOrDefault(x => x.Id == id);
@@ -118,8 +118,7 @@ namespace Quanlykhohang.Controllers.User
             var usernameExists = Users.Any(
                 x => x.Username.Equals(
                     dto.Username,
-                    StringComparison.OrdinalIgnoreCase
-                )
+                    StringComparison.OrdinalIgnoreCase)
             );
 
             if (usernameExists)
@@ -138,8 +137,7 @@ namespace Quanlykhohang.Controllers.User
             var emailExists = Users.Any(
                 x => x.Email.Equals(
                     dto.Email,
-                    StringComparison.OrdinalIgnoreCase
-                )
+                    StringComparison.OrdinalIgnoreCase)
             );
 
             if (emailExists)
@@ -157,7 +155,10 @@ namespace Quanlykhohang.Controllers.User
 
             var model = new UserModel
             {
-                Id = Guid.NewGuid(),
+                // Tự sinh ID dạng int
+                Id = Users.Count == 0
+                    ? 1
+                    : Users.Max(x => x.Id) + 1,
 
                 Username = dto.Username,
 
@@ -171,7 +172,7 @@ namespace Quanlykhohang.Controllers.User
 
                 PhoneNumber = dto.PhoneNumber,
 
-                AvatarUrl = dto.Avatar,
+                AvatarUrl = dto.AvatarUrl,
 
                 // User mới mặc định Active.
                 Status = UserStatus.Active,
@@ -207,9 +208,9 @@ namespace Quanlykhohang.Controllers.User
         // Cập nhật thông tin User
         // =========================================================
 
-        [HttpPut("{id:guid}")]
+        [HttpPut("{id:int}")]
         public IActionResult UpdateUser(
-            Guid id,
+            int id,
             [FromBody] UpdateUserDto dto)
         {
             // -----------------------------------------------------
@@ -237,8 +238,7 @@ namespace Quanlykhohang.Controllers.User
                     x.Id != id &&
                     x.Email.Equals(
                         dto.Email,
-                        StringComparison.OrdinalIgnoreCase
-                    )
+                        StringComparison.OrdinalIgnoreCase)
             );
 
             if (emailExists)
@@ -276,8 +276,8 @@ namespace Quanlykhohang.Controllers.User
         // Xóa User
         // =========================================================
 
-        [HttpDelete("{id:guid}")]
-        public IActionResult DeleteUser(Guid id)
+        [HttpDelete("{id:int}")]
+        public IActionResult DeleteUser(int id)
         {
             var user = Users
                 .FirstOrDefault(x => x.Id == id);

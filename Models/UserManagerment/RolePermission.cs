@@ -1,12 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace QUANLYKHOHANG.API.Models.UserManagement;
 
 public class RolePermission
 {
-    public Guid RoleId { get; set; }
+    [Required(ErrorMessage = "RoleId là bắt buộc.")]
+    public int RoleId { get; set; }
 
     public RolesModel Role { get; set; } = null!;
 
-    public Guid PermissionId { get; set; }
+    [Required(ErrorMessage = "PermissionId là bắt buộc.")]
+    public int PermissionId { get; set; }
 
     public Permission Permission { get; set; } = null!;
 }
